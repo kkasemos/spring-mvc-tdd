@@ -20,10 +20,17 @@ public class ProductSearch {
 
 	@RequestMapping(value = "/product/search", method = RequestMethod.GET)
 	public void productSearch(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String keyword = request.getParameter("q");
+		String keyword = StringUtils.stripToEmpty(request.getParameter("q"));
+		String errorText = String.format("Could not find any product matches '%s'", keyword);
+		
 		logger.info("productSearch called with '" + StringUtils.stripToEmpty(keyword) + "'");
 		
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-		response.getWriter().write("{\"name\":\"Very Nice Shoes\"}");
+		
+		if("Very Nice Shoes".equals(keyword)) {
+			response.getWriter().write("{\"name\":\"Very Nice Shoes\"}");
+		} else {
+			response.getWriter().write("{\"errorText\":\"" + errorText + "\"}");
+		}
 	}
 }

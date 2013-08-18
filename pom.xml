@@ -130,7 +130,14 @@
 			<artifactId>h2</artifactId>
 			<version>1.3.173</version>
 		</dependency>
-            				
+ 
+ 		<!-- Object Mapper --> 
+ 		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.13</version>
+		</dependency>
+		
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>

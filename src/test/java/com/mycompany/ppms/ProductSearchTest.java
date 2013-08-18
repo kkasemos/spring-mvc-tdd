@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,7 +19,10 @@ import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration("test-servlet-context.xml")
+@ContextHierarchy({
+	@ContextConfiguration("classpath:com/mycompany/ppms/service/test-service-context.xml"),
+	@ContextConfiguration("test-servlet-context.xml")
+})
 public class ProductSearchTest {
 
     @Autowired
@@ -38,21 +42,20 @@ public class ProductSearchTest {
         this.mockMvc.perform(get("/product/search")
         		.param("q", keyword)
         		.accept(MediaType.APPLICATION_JSON))
-          .andExpect(status().isOk())
-          .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-			.andExpect(jsonPath("$.status").value("found"))
-			.andExpect(jsonPath("$.products[0].name").value("Very Nice Shoes"));
+        		.andExpect(status().isOk())
+        		.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        		.andExpect(jsonPath("$.status").value("found"))
+        		.andExpect(jsonPath("$.products[0].name").value("Very Nice Shoes"));
     }
     
 	@Test
 	public void testSearchProductByNameNotFound() throws Exception {
 		String keyword = "Soft Shoes";
-		String text = String.format(
-				"Could not find any product matches '%s'", keyword);
+		String text = String.format("Could not find any product matches '%s'", keyword);
 
 		this.mockMvc.perform(get("/product/search")
-					.param("q", keyword)
-					.accept(MediaType.APPLICATION_JSON))
+				.param("q", keyword)
+				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.status").value("not found"))
@@ -64,8 +67,8 @@ public class ProductSearchTest {
 		String keyword = "Shoes";
 		
 		this.mockMvc.perform(get("/product/search")
-				.param("q", keyword)
-				.accept(MediaType.APPLICATION_JSON))
+			.param("q", keyword)
+			.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 			.andExpect(jsonPath("$.status").value("found"))
@@ -78,12 +81,12 @@ public class ProductSearchTest {
 		String keyword = "Cool Shoes";
 		
 		this.mockMvc.perform(get("/product/search")
-				.param("q", keyword)
-				.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.status").value("found"))
-				.andExpect(jsonPath("$.products[1]").doesNotExist())
-				.andExpect(jsonPath("$.products[0].name").value("Cool Shoes"));
+			.param("q", keyword)
+			.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+			.andExpect(jsonPath("$.status").value("found"))
+			.andExpect(jsonPath("$.products[1]").doesNotExist())
+			.andExpect(jsonPath("$.products[0].name").value("Cool Shoes"));
 	}
 }

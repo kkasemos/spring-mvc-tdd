@@ -32,6 +32,17 @@ public class ProductServiceTest {
 	}
 	
 	@Test
+	public void testFindByNameContainsCoolShoesFoundOne() {
+		String name = "Cool Shoes";
+		String description = "Cool Shoes made in Japan";
+		List<Product> matchedProducts = productService.findByNameContains(name);
+		
+		assertEquals(1, matchedProducts.size());
+		assertEquals(name, matchedProducts.get(0).getName());
+		assertEquals(description, matchedProducts.get(0).getDescription());
+	}
+	
+	@Test
 	public void testFindByNameContainsNiceShoesFoundOne() {
 		String name = "Very Nice Shoes";
 		String description = "Very Nice Shoes made in Thailand";
@@ -40,5 +51,23 @@ public class ProductServiceTest {
 		assertTrue(matchedProducts.size() == 1);
 		assertEquals(name, matchedProducts.get(0).getName());
 		assertEquals(description, matchedProducts.get(0).getDescription());
+	}
+	
+	@Test
+	public void testFindByNameContainsShoesFoundTwo() {
+		String keyword = "Shoes";
+		String name1 = "Very Nice Shoes";
+		String description1 = "Very Nice Shoes made in Thailand";
+		String name2 = "Cool Shoes";
+		String description2 = "Cool Shoes made in Japan";
+		List<Product> matchedProducts = productService.findByNameContains(keyword);
+		
+		assertEquals(2, matchedProducts.size());
+		
+		assertEquals(name1, matchedProducts.get(0).getName());
+		assertEquals(description1, matchedProducts.get(0).getDescription());
+
+		assertEquals(name2, matchedProducts.get(1).getName());
+		assertEquals(description2, matchedProducts.get(1).getDescription());
 	}
 }

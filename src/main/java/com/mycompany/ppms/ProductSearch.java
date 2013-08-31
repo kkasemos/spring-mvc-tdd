@@ -1,18 +1,16 @@
 package com.mycompany.ppms;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,6 +27,7 @@ public class ProductSearch {
 	@Autowired
 	ProductService productService;
 	
+	
 	final Logger logger = LoggerFactory.getLogger(ProductSearch.class);
 	
 	@RequestMapping(value = "/product/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -37,10 +36,10 @@ public class ProductSearch {
 		
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		
-		String keyword = StringUtils.stripToEmpty(q);
+		String keyword = (q == null)?"":q;
 		String text = String.format("Could not find any product matches '%s'", keyword);
 		
-		logger.info("productSearch called with '" + StringUtils.stripToEmpty(keyword) + "'");
+		logger.info("productSearch called with '" + keyword + "'");
 		
 		/* search the products */
 		List<Product> matchedProducts = productService.findByNameContains(keyword);
@@ -55,5 +54,11 @@ public class ProductSearch {
 		}
 		
 		return jsonMap;
+	}
+	
+	@RequestMapping(value = "/product/searchForm")
+	public String productSearchForm() {
+		
+		return "product/searchForm";
 	}
 }

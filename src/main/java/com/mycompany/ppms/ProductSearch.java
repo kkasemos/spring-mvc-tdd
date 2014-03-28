@@ -5,27 +5,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mycompany.ppms.model.Product;
 import com.mycompany.ppms.service.ProductService;
+import com.mycompany.ppms.service.external.ToKeepTracksService;
+import com.mycompany.ppms.service.external.ToKeepTracksServiceException;
 
 @Controller
 public class ProductSearch {
 	
 	@Autowired
 	ProductService productService;
+	
+	@Autowired
+	ToKeepTracksService toKeepTracksService;
 	
 	
 	final Logger logger = LoggerFactory.getLogger(ProductSearch.class);
@@ -51,6 +53,12 @@ public class ProductSearch {
 		} else {
 			jsonMap.put("status", "not found");
 			jsonMap.put("text", text);
+		}
+		
+		try {
+			toKeepTracksService.searchKeyword(keyword);
+		} catch (ToKeepTracksServiceException e) {
+			logger.error("searchKeyword error {}", e.getMessage());
 		}
 		
 		return jsonMap;

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+	</bean>   
+	<bean id="toKeepTracksService" class="com.mycompany.ppms.service.external.ToKeepTracksService">
+		<property name="urlOfSearchKeyword" value="http://www.tokeeptracks.com/searchkeyword"></property>
+		<property name="restTemplate" ref="restTemplate"></property>
+	</bean>
+</beans>

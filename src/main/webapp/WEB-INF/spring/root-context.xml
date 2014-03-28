@@ -30,5 +30,13 @@
                 <prop key="hibernate.hbm2ddl.import_files">product_test_data.sql</prop>
             </props>
         </property>
-    </bean>		
+    </bean>
+    
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+	</bean>   
+	<bean id="toKeepTracksService" class="com.mycompany.ppms.service.external.ToKeepTracksService">
+		<property name="urlOfSearchKeyword" value="http://www.tokeeptracks.com/searchkeyword"></property>
+		<property name="restTemplate" ref="restTemplate"></property>
+	</bean>
+	 
 </beans>

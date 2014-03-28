@@ -21,7 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 @WebAppConfiguration
 @ContextHierarchy({
 	@ContextConfiguration("classpath:com/mycompany/ppms/service/test-service-context.xml"),
-	@ContextConfiguration("test-servlet-context.xml")
+	@ContextConfiguration("test-servlet-context.xml"),
 })
 public class ProductSearchTest {
 
